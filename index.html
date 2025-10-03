@@ -17,7 +17,12 @@
     <div class="editor-card">
       <div class="toolbar">
         <button onclick="newFile()">New</button>
-        <input type="file" id="openFile" onchange="openFile(event)">
+        <!-- Hidden file input -->
+<input type="file" id="openFile" onchange="openFile(event)" style="display: none;">
+
+<!-- Custom button -->
+<button onclick="document.getElementById('openFile').click()">Open File</button>
+
         <button onclick="saveFile()">Save</button>
         <button onclick="downloadFile()">Download</button>
 
@@ -46,3 +51,4 @@
   <script src="script.js" defer></script>
 </body>
 </html>
+
