@@ -1,115 +1,73 @@
-:root {
-  --primary: #4a90e2;
-  --bg: #f5f7fa;
-  --card-bg: #ffffff;
-  --toolbar-bg: #f1f3f6;
-  --text-color: #333;
-  --status-bg: #f0f0f0;
+const editor = document.getElementById('editor');
+const statusbar = document.getElementById('statusbar');
+const fontSizeSelect = document.getElementById('fontSize');
+
+// NEW file
+function newFile() {
+  editor.value = "";
+  updateStatus();
 }
-body.dark {
-  --bg: #1e1e1e;
-  --card-bg: #2a2a2a;
-  --toolbar-bg: #333;
-  --text-color: #eaeaea;
-  --status-bg: #222;
+
+// OPEN file
+function openFile(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    editor.value = e.target.result;
+    updateStatus();
+  };
+  reader.readAsText(file);
 }
-* { box-sizing: border-box; }
-body {
-  margin: 0;
-  font-family: "Inter", sans-serif;
-  background: var(--bg);
-  color: var(--text-color);
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
+
+// SAVE to localStorage
+function saveFile() {
+  localStorage.setItem("textEditorContent", editor.value);
+  alert("Saved to local storage!");
 }
-header {
-  background: var(--primary);
-  color: #fff;
-  padding: 15px 20px;
-  font-size: 1.3rem;
-  font-weight: 600;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+
+// DOWNLOAD as txt
+function downloadFile() {
+  const blob = new Blob([editor.value], { type: "text/plain" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "textfile.txt";
+  a.click();
 }
-header button {
-  background: rgba(255,255,255,0.2);
-  border: none;
-  border-radius: 6px;
-  padding: 6px 12px;
-  color: #fff;
-  cursor: pointer;
-  transition: 0.2s;
+
+// UNDO / REDO
+function undo() { document.execCommand("undo"); }
+function redo() { document.execCommand("redo"); }
+
+// FONT SIZE
+function changeFontSize(size) {
+  editor.style.fontSize = size + "px";
 }
-header button:hover { background: rgba(255,255,255,0.35); }
-.editor-container {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
+
+// TEXT COLOR
+function changeTextColor(color) {
+  editor.style.color = color;
 }
-.editor-card {
-  width: 90%;
-  max-width: 1000px;
-  background: var(--card-bg);
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+
+// THEME TOGGLE
+function toggleTheme() {
+  document.body.classList.toggle("dark");
 }
-.toolbar {
-  background: var(--toolbar-bg);
-  padding: 10px;
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  border-bottom: 1px solid #ccc;
-  justify-content: center;
+
+// STATUS BAR
+function updateStatus() {
+  const text = editor.value;
+  const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+  const chars = text.length;
+  statusbar.textContent = `Words: ${words} | Characters: ${chars}`;
 }
-.toolbar button, 
-.toolbar select, 
-.toolbar input[type="color"] {
-  padding: 8px 12px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  background: #fff;
-  color: #333;
-  font-weight: 500;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  transition: all 0.2s ease;
-}
-body.dark .toolbar button,
-body.dark .toolbar select,
-body.dark .toolbar input[type="color"] {
-  background: #444;
-  color: #eee;
-}
-.toolbar button:hover,
-.toolbar select:hover,
-.toolbar input[type="color"]:hover {
-  background: var(--primary);
-  color: #fff;
-}
-textarea {
-  flex: 1;
-  padding: 20px;
-  border: none;
-  outline: none;
-  font-size: 16px;
-  resize: none;
-  background: var(--card-bg);
-  line-height: 1.6;
-  color: var(--text-color);
-}
-.statusbar {
-  background: var(--status-bg);
-  padding: 8px 15px;
-  font-size: 14px;
-  text-align: right;
-  border-top: 1px solid #ccc;
-}
+
+// Auto-update status while typing
+editor.addEventListener("input", updateStatus);
+
+// Load saved content if available
+window.addEventListener("load", () => {
+  const saved = localStorage.getItem("textEditorContent");
+  if (saved) editor.value = saved;
+  updateStatus();
+});
