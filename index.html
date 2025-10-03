@@ -1,1 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pro Text Editor</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    Pro Text Editor
+    <button onclick="toggleTheme()">🌙</button>
+  </header>
+
+  <div class="editor-container">
+    <div class="editor-card">
+      <!-- Toolbar -->
+      <div class="toolbar">
+        <button onclick="newFile()">New</button>
+        <input type="file" id="openFile" onchange="openFile(event)" />
+        <button onclick="saveFile()">Save</button>
+        <button onclick="downloadFile()">Download</button>
+
+        <button onclick="document.execCommand('cut')">Cut</button>
+        <button onclick="document.execCommand('copy')">Copy</button>
+        <button onclick="document.execCommand('paste')">Paste</button>
+        <button onclick="undo()">Undo</button>
+        <button onclick="redo()">Redo</button>
+
+        <select id="fontSize" onchange="changeFontSize(this.value)">
+          <option value="14">14px</option>
+          <option value="16" selected>16px</option>
+          <option value="20">20px</option>
+          <option value="24">24px</option>
+          <option value="30">30px</option>
+        </select>
+
+        <input type="color" onchange="changeTextColor(this.value)" title="Text Color" />
+      </div>
+
+      <!-- Text Editor -->
+      <textarea id="editor" placeholder="Start typing here..."></textarea>
+
+      <!-- Status Bar -->
+      <div class="statusbar" id="statusbar">
+        Words: 0 | Characters: 0
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
 
