@@ -1,0 +1,55 @@
+const editor = document.getElementById('editor');
+const statusbar = document.getElementById('statusbar');
+
+function newFile() {
+  editor.value = "";
+  updateStatus();
+}
+
+function openFile(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    editor.value = e.target.result;
+    updateStatus();
+  };
+  reader.readAsText(file);
+}
+
+function saveFile() {
+  localStorage.setItem("textEditorContent", editor.value);
+  alert("File saved to local storage!");
+}
+
+function downloadFile() {
+  const blob = new Blob([editor.value], { type: "text/plain" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "textfile.txt";
+  a.click();
+}
+
+function undo() { document.execCommand("undo"); }
+function redo() { document.execCommand("redo"); }
+
+function changeFontSize(size) {
+  editor.style.fontSize = size + "px";
+}
+
+function changeTextColor(color) {
+  editor.style.color = color;
+}
+
+function updateStatus() {
+  const text = editor.value;
+  const words = text.trim().length ? text.trim().split(/\s+/).length : 0;
+  const chars = text.length;
+  statusbar.textContent = `Words: ${words} | Characters: ${chars}`;
+}
+
+function toggleTheme() {
+  document.body.classList.toggle("dark");
+}
+
+editor.addEventListener("input", updateStatus);
