@@ -77,8 +77,9 @@ function changeTextColor(color) {
 
 // --- Theme ---
 function toggleTheme() {
-  document.body.classList.toggle("dark");
+  document.body.classList.toggle("minimal-dark");
 }
+
 
 // --- Status bar ---
 function updateStatus() {
@@ -96,3 +97,4 @@ window.addEventListener("load", () => {
   if (saved) editor.innerText = saved;
   updateStatus();
 });
+
