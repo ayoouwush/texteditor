@@ -77,28 +77,31 @@ header button:hover { background: var(--button-hover); }
 
 .toolbar {
   background: var(--toolbar-bg);
-  padding: 10px;
+  padding: 8px;
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  flex-wrap: wrap; /* allow wrapping only if absolutely necessary */
+  gap: 6px;
   border-bottom: 1px solid rgba(0,0,0,0.05);
-  justify-content: flex-start;
+  justify-content: space-between; /* spread buttons evenly */
+  align-items: center;
 }
 
-.toolbar button, .toolbar select, .toolbar input[type="color"] {
-  padding: 8px 12px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  background: var(--button-bg);
-  color: var(--text-color);
-  font-weight: 500;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-  transition: all 0.2s ease;
+.toolbar button, 
+.toolbar select, 
+.toolbar input[type="color"] {
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  flex: 1 1 auto; /* allow shrinking so all buttons fit */
+  min-width: 50px; /* avoid buttons being too small */
+  height: 32px;    /* uniform height */
+  box-sizing: border-box;
 }
 
-.toolbar button:hover, .toolbar select:hover, .toolbar input[type="color"]:hover {
-  background: var(--button-hover);
+.toolbar input[type="color"] {
+  width: 32px;  /* small square to fit */
+  padding: 0;
+  flex: 0 0 auto; /* do not shrink color picker too much */
 }
 
 .editor {
@@ -135,3 +138,4 @@ header button:hover { background: var(--button-hover); }
   .toolbar button, .toolbar select, .toolbar input[type="color"] { flex: 1 1 100%; }
   .editor { min-height: 250px; padding: 15px; font-size: 14px; }
 }
+
