@@ -9,7 +9,13 @@ function newFile() {
 
 function openFile(event) {
   const file = event.target.files[0];
-  if (!file) return;
+  const fileNameSpan = document.getElementById('fileName');
+  if (!file) {
+    fileNameSpan.textContent = "No file chosen";
+    return;
+  }
+  fileNameSpan.textContent = file.name;
+
   const reader = new FileReader();
   reader.onload = e => {
     editor.innerText = e.target.result;
@@ -17,6 +23,7 @@ function openFile(event) {
   };
   reader.readAsText(file);
 }
+
 
 function saveFile() {
   localStorage.setItem("textEditorContent", editor.innerText);
@@ -97,4 +104,5 @@ window.addEventListener("load", () => {
   if (saved) editor.innerText = saved;
   updateStatus();
 });
+
 
