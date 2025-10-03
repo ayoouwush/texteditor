@@ -15,18 +15,17 @@
 
   <div class="editor-container">
     <div class="editor-card">
-      <!-- Toolbar -->
       <div class="toolbar">
         <button onclick="newFile()">New</button>
         <input type="file" id="openFile" onchange="openFile(event)">
         <button onclick="saveFile()">Save</button>
         <button onclick="downloadFile()">Download</button>
 
-        <button onclick="execCommand('cut')">Cut</button>
-        <button onclick="execCommand('copy')">Copy</button>
+        <button onclick="cutText()">Cut</button>
+        <button onclick="copyText()">Copy</button>
         <button onclick="pasteText()">Paste</button>
-        <button onclick="execCommand('undo')">Undo</button>
-        <button onclick="execCommand('redo')">Redo</button>
+        <button onclick="undo()">Undo</button>
+        <button onclick="redo()">Redo</button>
 
         <select id="fontSize" onchange="changeFontSize(this.value)">
           <option value="14">14px</option>
@@ -39,10 +38,7 @@
         <input type="color" onchange="changeTextColor(this.value)" title="Text Color">
       </div>
 
-      <!-- Editor -->
       <div id="editor" class="editor" contenteditable="true" spellcheck="false"></div>
-
-      <!-- Status Bar -->
       <div class="statusbar" id="statusbar">Words: 0 | Characters: 0</div>
     </div>
   </div>
