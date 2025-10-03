@@ -1,23 +1,31 @@
 :root {
-  --primary: #4a90e2;
-  --bg: #ffffff;
-  --card-bg: #fefefe;
-  --toolbar-bg: #f8f8f8;
-  --text-color: #1c1c1c;
-  --status-bg: #f4f4f4;
-  --button-bg: #ffffff;
-  --button-hover: #e0e0e0;
+  --primary: #4a90e2;       /* main blue */
+  --bg: #ffffff;             /* background */
+  --card-bg: #fefefe;        /* editor card */
+  --toolbar-bg: #f8f8f8;     /* toolbar background */
+  --text-color: #1c1c1c;     /* default text color */
+  --status-bg: #f4f4f4;      /* status bar */
+  --button-bg: #ffffff;       /* button background */
+  --button-hover: #4a90e2;    /* hover color */
+  --button-hover-text: #fff;  /* text on hover */
+  --border-color: #e0e0e0;    /* subtle border for editor/card */
+  --shadow-color: rgba(0,0,0,0.08); /* soft shadow */
 }
 
 body.minimal-dark {
+  --primary: #4a90e2;
   --bg: #1e1e1e;
   --card-bg: #252525;
   --toolbar-bg: #2a2a2a;
   --text-color: #eaeaea;
   --status-bg: #1c1c1c;
   --button-bg: #333;
-  --button-hover: #444;
+  --button-hover: #4a90e2;
+  --button-hover-text: #fff;
+  --border-color: #444;
+  --shadow-color: rgba(0,0,0,0.3);
 }
+
 
 * { box-sizing: border-box; }
 
@@ -68,7 +76,8 @@ header button:hover { background: var(--button-hover); }
   max-width: 900px;
   background: var(--card-bg);
   border-radius: 12px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+  border: 1px solid var(--border-color);   /* subtle border */
+  box-shadow: 0 8px 16px var(--shadow-color);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -86,25 +95,34 @@ header button:hover { background: var(--button-hover); }
   align-items: center;
 }
 
-.toolbar button, 
-.toolbar select, 
-.toolbar input[type="color"] {
+.toolbar button, .toolbar select, .toolbar input[type="color"] {
   padding: 6px 10px;
   border-radius: 6px;
   font-size: 14px;
-  flex: 1 1 auto; /* allow shrinking so all buttons fit */
-  min-width: 50px; /* avoid buttons being too small */
-  height: 32px;    /* uniform height */
-  box-sizing: border-box;
+  height: 32px;
+  flex: 1 1 auto;
+  min-width: 50px;
+  background: var(--button-bg);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);  /* subtle border */
+  box-shadow: 0 1px 3px var(--shadow-color);
+  transition: all 0.2s ease;
 }
 
-.toolbar input[type="color"] {
-  width: 32px;  /* small square to fit */
-  padding: 0;
-  flex: 0 0 auto; /* do not shrink color picker too much */
+.toolbar button:hover,
+.toolbar select:hover,
+.toolbar input[type="color"]:hover {
+  background: var(--button-hover);      /* blue hover */
+  color: var(--button-hover-text);      /* text white on hover */
+  border-color: var(--primary);         /* border also blue on hover */
+  box-shadow: 0 2px 6px var(--shadow-color);
 }
+
 
 .editor {
+  border: 1px solid var(--border-color);  /* subtle border around editor */
+  border-radius: 6px;
+  transition: border-color 0.3s, box-shadow 0.3s;
   flex: 1;
   padding: 20px;
   outline: none;
@@ -116,6 +134,11 @@ header button:hover { background: var(--button-hover); }
   overflow-y: auto;
   white-space: pre-wrap;
   transition: background 0.3s, color 0.3s;
+}
+
+.editor:focus {
+  border-color: var(--primary);           /* blue border on focus */
+  box-shadow: 0 0 8px var(--primary);
 }
 
 .statusbar {
@@ -138,4 +161,5 @@ header button:hover { background: var(--button-hover); }
   .toolbar button, .toolbar select, .toolbar input[type="color"] { flex: 1 1 100%; }
   .editor { min-height: 250px; padding: 15px; font-size: 14px; }
 }
+
 
