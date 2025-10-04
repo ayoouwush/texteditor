@@ -163,6 +163,61 @@ for (let i = 0; i < 5; i++) {
     )
   );
 }
+/* === Ambient Floating Lights === */
+class AmbientLight {
+  constructor(x, y, radius, color, speedX, speedY) {
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
+    this.color = color;
+    this.speedX = speedX;
+    this.speedY = speedY;
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.fillStyle = this.color;
+    ctx.shadowColor = this.color;
+    ctx.shadowBlur = 40;
+    ctx.fill();
+  }
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+
+    // bounce gently off screen edges
+    if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+    if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+
+    this.draw();
+  }
+}
+
+const ambientLights = [];
+for (let i = 0; i < 3; i++) {
+  ambientLights.push(
+    new AmbientLight(
+      Math.random() * canvas.width,
+      Math.random() * canvas.height,
+      80,
+      'rgba(74, 144, 226, 0.08)', // very faint blue
+      (Math.random() - 0.5) * 0.2,
+      (Math.random() - 0.5) * 0.2
+    )
+  );
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // draw faint ambient lights first
+  ambientLights.forEach(light => light.update());
+  // then the cursor-following bright lights
+  lights.forEach(light => light.update());
+
+  requestAnimationFrame(animate);
+}
+
 
 function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -182,6 +237,7 @@ window.addEventListener("load", () => {
   if (savedFontSize) editor.style.fontSize = savedFontSize;
   if (savedTheme === "dark") document.body.classList.add("minimal-dark");
 });
+
 
 
 
