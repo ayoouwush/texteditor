@@ -184,5 +184,81 @@ header button:hover { background: var(--button-hover); }
   .editor { min-height: 250px; padding: 15px; font-size: 14px; }
 }
 
+/* === Animated Gradient Background === */
+body {
+  background: radial-gradient(circle at 30% 30%, #0d1117, #010409);
+  background-size: 400% 400%;
+  animation: subtleShift 20s ease infinite;
+  transition: background 0.5s ease;
+}
+
+@keyframes subtleShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* === Ambient Floating Lights === */
+class AmbientLight {
+  constructor(x, y, radius, color, speedX, speedY) {
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
+    this.color = color;
+    this.speedX = speedX;
+    this.speedY = speedY;
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.fillStyle = this.color;
+    ctx.shadowColor = this.color;
+    ctx.shadowBlur = 40;
+    ctx.fill();
+  }
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+
+    // bounce gently off screen edges
+    if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+    if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+
+    this.draw();
+  }
+}
+
+const ambientLights = [];
+for (let i = 0; i < 3; i++) {
+  ambientLights.push(
+    new AmbientLight(
+      Math.random() * canvas.width,
+      Math.random() * canvas.height,
+      80,
+      'rgba(74, 144, 226, 0.08)', // very faint blue
+      (Math.random() - 0.5) * 0.2,
+      (Math.random() - 0.5) * 0.2
+    )
+  );
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // draw faint ambient lights first
+  ambientLights.forEach(light => light.update());
+  // then the cursor-following bright lights
+  lights.forEach(light => light.update());
+
+  requestAnimationFrame(animate);
+}
+
+
 
 
