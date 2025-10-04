@@ -26,9 +26,17 @@ function openFile(event) {
 
 
 function saveFile() {
+  const editor = document.getElementById("editor");
+  const fontSize = window.getComputedStyle(editor).fontSize;
+  const isDarkTheme = document.body.classList.contains("minimal-dark");
+
   localStorage.setItem("textEditorContent", editor.innerText);
+  localStorage.setItem("textEditorFontSize", fontSize);
+  localStorage.setItem("textEditorTheme", isDarkTheme ? "dark" : "light");
+
   alert("Saved to local storage!");
 }
+
 
 function downloadFile() {
   const blob = new Blob([editor.innerText], { type: "text/plain" });
@@ -75,8 +83,10 @@ function redo() {
 
 // --- Formatting ---
 function changeFontSize(size) {
+  const editor = document.getElementById("editor");
   editor.style.fontSize = size + "px";
 }
+
 
 function changeTextColor(color) {
   editor.style.color = color;
@@ -161,6 +171,19 @@ function animate() {
 }
 
 animate();
+
+window.addEventListener("load", () => {
+  const savedText = localStorage.getItem("textEditorContent");
+  const savedFontSize = localStorage.getItem("textEditorFontSize");
+  const savedTheme = localStorage.getItem("textEditorTheme");
+  const editor = document.getElementById("editor");
+
+  if (savedText) editor.innerText = savedText;
+  if (savedFontSize) editor.style.fontSize = savedFontSize;
+  if (savedTheme === "dark") document.body.classList.add("minimal-dark");
+});
+
+
 
 
 
