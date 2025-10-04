@@ -104,5 +104,64 @@ window.addEventListener("load", () => {
   if (saved) editor.innerText = saved;
   updateStatus();
 });
+/* === Glowing Background Lights === */
+const canvas = document.getElementById('bgCanvas');
+const ctx = canvas.getContext('2d');
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let mouse = { x: null, y: null };
+
+window.addEventListener('mousemove', e => {
+  mouse.x = e.x;
+  mouse.y = e.y;
+});
+
+class Light {
+  constructor(x, y, radius, color) {
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
+    this.color = color;
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.fillStyle = this.color;
+    ctx.shadowColor = this.color;
+    ctx.shadowBlur = 20;
+    ctx.fill();
+  }
+  update() {
+    if (mouse.x && mouse.y) {
+      this.x += (mouse.x - this.x) * 0.02;
+      this.y += (mouse.y - this.y) * 0.02;
+    }
+    this.draw();
+  }
+}
+
+const lights = [];
+for (let i = 0; i < 5; i++) {
+  lights.push(
+    new Light(
+      Math.random() * canvas.width,
+      Math.random() * canvas.height,
+      20,
+      'rgba(74,144,226,0.4)'
+    )
+  );
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  lights.forEach(light => light.update());
+  requestAnimationFrame(animate);
+}
+
+animate();
+
+
 
 
